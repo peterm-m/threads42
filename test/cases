@@ -1,0 +1,35 @@
+# argc = 1
+
+# argc = 2
+0
+# argc = 3
+0 0
+# argc = 4
+0 0 0
+# argc = 5 no valid
+0 0 0 0
+# test args correct parser
+1 1 1 1
+# test args correct parser limits
+2147483647 2147483647 2147483647 2147483647 2147483647
+# test args parser limits+1
+2147483648 2147483648 2147483648 2147483648 2147483648
+# test args parser sing
++1 +1 +1 +1
+# test args parser negatives
+-1 1 1 1
+1 -1 1 1
+1 1 -1 1
+1 1 1 -1
+# test args parser no digit
+a 1 1 1 1
+1 a 1 1 1
+1 1 a 1 1
+1 1 1 a 1
+1 1 1 1 a
+# argc = 6 no valid
+0 0 0 0 0
+# argc = 7
+0 0 0 0 0 0
+# nuevo test = 7
+0 0 0 0 0 0 55555

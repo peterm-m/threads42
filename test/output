@@ -1,0 +1,33 @@
+
+# argc = 1
+Incorrect number of arguments
+# argc = 2
+Incorrect number of arguments
+# argc = 3
+Incorrect number of arguments
+# argc = 4
+Incorrect number of arguments
+# argc = 5 no valid
+No valid argument
+# test args correct parser
+# test args correct parser limits
+# test args parser limits+1
+No valid argument
+# test args parser sing
+# test args parser negatives
+No valid argument
+No valid argument
+No valid argument
+No valid argument
+# test args parser no digit
+No valid argument
+No valid argument
+No valid argument
+No valid argument
+No valid argument
+# argc = 6 no valid
+No valid argument
+# argc = 7
+Incorrect number of arguments
+# nuevo test = 7
+Incorrect number of arguments
