@@ -14,18 +14,21 @@
 
 void	*ph_life(void *a)
 {
-	int	i;
+	static pthread_mutex_t	creation = PTHREAD_MUTEX_INITIALIZER;
+	static int	philo_created = 0;
+	static int	philo_lives = 0;
+	t_philo	philo;
 
-	i = *(int *) a;
-	while (1)
-	{
-		ph_think(i);
-		ph_eat(i);
-		ph_sleep(i);
-	}
+	pthread_mutex_lock(&creation);
+	philo_created += 1;
+	philo_lives += 1;
+	pthread_mutex_unlock(&creation);
+	philo = *(t_philo *)a;
+	ph_think(philo.id);
+	ph_eat(philo.id);
+	ph_sleep(philo.id);
 	return (a);
 }
-
 
 // critical section forks
 void	ph_eat(int i)

@@ -13,7 +13,7 @@ SRCS := $(SRCS:%=$(SRC_DIR)/%)
 OBJS := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 CC := gcc
-CFLAG := -Wall -Wextra -Werror
+CFLAG := -Wall -Wextra -Werror -g3 -fsanitize=address
 PTHREAD := -lpthread
 
 RM := rm -f

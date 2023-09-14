@@ -36,7 +36,7 @@
 # define LOG_THINK " is thinking"
 # define LOG_DIE " died"
 
-# define LOG_GENERIC " ej log"
+
 /*
 *	unsigned int	n_phil
 *	unsigned int	t_die
@@ -54,13 +54,20 @@ typedef struct s_input
 	int				n_eat;
 }	t_input;
 
-typedef struct s_philo
+typedef struct	s_philo
 {
-	t_input			*in;
-	int				*id;
-	pthread_t		*philo;
-	pthread_mutex_t	*fork;
+	int				id;
+	pthread_t		thread;
+	pthread_mutex_t	fork;
 }	t_philo;
+
+//typedef struct s_philo
+//{
+//	t_input			*in;
+//	int				*id;
+//	pthread_t		*philo;
+//	pthread_mutex_t	*fork;
+//}	t_philo;
 
 int				ph_philosophers(t_input *input);
 
