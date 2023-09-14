@@ -35,27 +35,27 @@ static t_philo	*ph_declaration(t_input *input)
 	return (philo);
 }
 
-static t_philo	*ph_initialization(t_input	*input)
+static t_philo	*ph_initialization(t_philo *philo, t_input	*input)
 {
 	int		i;
 	int		out;
-	t_philo	*philo;
 
-	i = 0;
+	i = -1;
 	out = 0;
-	philo = ph_declaration(input);
-	while (i < input->n_philo)
+	while (++i < input->n_philo && out == 0)
 	{
 		philo[i].id = i +1;
-		out = pthread_mutex_init(&(philo[i].fork) , NULL);
+		out = pthread_mutex_init(&(philo[i].fork), NULL);
 		if (out != 0)
 			err_exit(ERR_MSG_MTXCRE);
 		out = pthread_create(&(philo[i].thread), NULL, ph_life, &(philo[i]));
 		if (out != 0)
 			err_exit(ERR_MSG_PTHCRE);
 		if (out != 0)
-			break;
-		i++;
+		{
+			ph_clean(philo, input);
+			return ((t_philo *) NULL);
+		}
 	}
 	return (philo);
 }
@@ -64,7 +64,10 @@ int	ph_philosophers(t_input *input)
 {
 	t_philo	*philo;
 
-	philo = ph_initialization(input);
+	philo = ph_declaration(input);
+	if (philo == NULL)
+		return (EXIT_FAILURE);
+	ph_initialization(philo, input);
 	if (philo == NULL)
 		return (EXIT_FAILURE);
 	pthread_join(philo[input->n_philo -1].thread, NULL);
