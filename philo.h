@@ -28,6 +28,7 @@
 # define ERR_MSG_VARGS "No valid argument"
 # define ERR_MSG_MALLOC "Malloc error"
 # define ERR_MSG_PTHCRE "Thread creation error"
+# define ERR_MSG_MTXCRE "Mutex creation error"
 
 # define LOG_FORK " has taken a fork"
 # define LOG_EAT " is eating"
