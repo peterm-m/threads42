@@ -22,14 +22,14 @@ static	t_input	*parser(int argc, const char **argv)
 		err_exit(ERR_MSG_MALLOC);
 		return (i);
 	}	
-	i->n_philo = get_uint(argv[1]);
+	i->n_ph = get_uint(argv[1]);
 	i->t_die = get_uint(argv[2]);
 	i->t_eat = get_uint(argv[3]);
 	i->t_sleep = get_uint(argv[4]);
 	i->n_eat = -1;
 	if (argc == 6)
 		i->n_eat = (int) get_uint(argv[5]);
-	if (i->n_philo == 0 || i->t_die == 0
+	if (i->n_ph == 0 || i->t_die == 0
 		|| i->t_eat == 0 || i->t_sleep == 0 || i->n_eat == 0)
 	{
 		err_exit(ERR_MSG_VARGS);
@@ -62,5 +62,6 @@ int	main(int argc, char const **argv)
 		clean(input);
 		return (EXIT_FAILURE);
 	}
+	clean(input);
 	return (EXIT_SUCCESS);
 }

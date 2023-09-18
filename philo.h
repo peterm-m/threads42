@@ -13,6 +13,8 @@
 #ifndef PHILO_H
 # define PHILO_H
 
+# include "parser.h"
+
 # include <sys/types.h>
 # include <sys/time.h>
 
@@ -31,52 +33,46 @@
 # define ERR_MSG_MTXCRE "Mutex creation error"
 
 # define LOG_FORK " has taken a fork"
+
 # define LOG_EAT " is eating"
 # define LOG_SLEEP " is sleeping"
 # define LOG_THINK " is thinking"
 # define LOG_DIE " died"
 
+# define GOOD 0
+# define DIE  1
+# define END  2
 
-/*
-*	unsigned int	n_phil
-*	unsigned int	t_die
-*	unsigned int	t_eat
-*	unsigned int	t_sleep
-*	int				n_eat
-*/
+struct	s_philo;
 
-typedef struct s_input
+typedef struct s_info
 {
-	unsigned int	n_philo;
+	unsigned int	n_ph;
 	unsigned int	t_die;
 	unsigned int	t_eat;
 	unsigned int	t_sleep;
-	int				n_eat;
-}	t_input;
+	struct s_philo	*philo;
+}	t_info;
 
-typedef struct	s_philo
+typedef struct s_philo
 {
 	int				id;
+	int				n_eat;
 	pthread_t		thread;
 	pthread_mutex_t	fork;
+	t_info			*info;
 }	t_philo;
-
-//typedef struct s_philo
-//{
-//	t_input			*in;
-//	int				*id;
-//	pthread_t		*philo;
-//	pthread_mutex_t	*fork;
-//}	t_philo;
 
 int				ph_philosophers(t_input *input);
 
-void			ph_print_action(int time, int id, const char *log);
+void			ph_print_action(int time, t_philo *ph, const char *log);
 
 void			*ph_life(void *a);
-void			ph_eat(int i);
-void			ph_sleep(int i);
-void			ph_think(int i);
+
+void			ph_take_fork(t_philo *ph);
+int				ph_eat(t_philo *ph);
+int				ph_sleep(t_philo *ph);
+int				ph_think(t_philo *ph);
 
 void			err_exit(const char *format);
 unsigned int	get_uint(const char *str);

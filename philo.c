@@ -12,65 +12,91 @@
 
 #include "philo.h"
 
-static void	ph_clean(t_philo *philo, t_input *input)
+static void	ph_clean(t_info *info)
 {
 	int	i;
 
 	i = 0;
-	while (i < input->n_philo)
+	while (i < info->n_ph)
 	{
-		pthread_mutex_destroy(&(philo[i].fork));
+		pthread_mutex_destroy(&(info->philo[i].fork));
 		i++;
 	}
-	free(philo);
+	free(info->philo);
+	free(info);
 }
 
-static t_philo	*ph_declaration(t_input *input)
+static t_info	*ph_info(t_input *input)
 {
-	t_philo	*philo;
+	t_info	*info;
 
-	philo = (t_philo *) malloc(sizeof(t_philo) * input->n_philo);
-	if (philo == NULL)
-		return ((t_philo *) NULL);
-	return (philo);
+	info = (t_info *) malloc(sizeof(t_info));
+	if (info == NULL)
+		return ((t_info *) NULL);
+	info->n_ph = input->n_ph;
+	info->t_die = input->t_die;
+	info->t_eat = input->t_eat;
+	info->t_sleep = input->t_sleep;
+	info->philo = (t_philo *) malloc(sizeof(t_philo) * info->n_ph);
+	if (info->philo == NULL)
+	{
+		free(info);
+		return ((t_info *) NULL);
+	}
+	return (info);
 }
 
-static t_philo	*ph_initialization(t_philo *philo, t_input	*input)
+static void	ph_philo_ini(t_info *info, t_input *input)
+{
+	int	i;
+
+	i = -1;
+	while (++i < info->n_ph)
+	{
+		info->philo[i].id = i +1;
+		info->philo[i].n_eat = input->n_eat;
+		info->philo[i].info = info;
+	}
+	return ;
+}
+
+static t_info	*ph_philo_launcher(t_info *info)
 {
 	int		i;
 	int		out;
 
 	i = -1;
 	out = 0;
-	while (++i < input->n_philo && out == 0)
+	while (++i < info->n_ph && out == 0)
 	{
-		philo[i].id = i +1;
-		out = pthread_mutex_init(&(philo[i].fork), NULL);
+		out = pthread_mutex_init(&(info->philo[i].fork), NULL);
 		if (out != 0)
 			err_exit(ERR_MSG_MTXCRE);
-		out = pthread_create(&(philo[i].thread), NULL, ph_life, &(philo[i]));
+		out = pthread_create(&(info->philo[i].thread), NULL, ph_life,
+				&(info->philo[i]));
 		if (out != 0)
 			err_exit(ERR_MSG_PTHCRE);
 		if (out != 0)
 		{
-			ph_clean(philo, input);
-			return ((t_philo *) NULL);
+			ph_clean(info);
+			return ((t_info *) NULL);
 		}
 	}
-	return (philo);
+	return (info);
 }
 
 int	ph_philosophers(t_input *input)
 {
-	t_philo	*philo;
+	t_info	*info;
 
-	philo = ph_declaration(input);
-	if (philo == NULL)
+	info = ph_info(input);
+	if (info == NULL)
 		return (EXIT_FAILURE);
-	ph_initialization(philo, input);
-	if (philo == NULL)
+	ph_philo_ini(info, input);
+	info = ph_philo_launcher(info);
+	if (info == NULL)
 		return (EXIT_FAILURE);
-	pthread_join(philo[input->n_philo -1].thread, NULL);
-	ph_clean(philo, input);
+	pthread_join(info->philo[info->n_ph -1].thread, NULL);
+	ph_clean(info);
 	return (EXIT_SUCCESS);
 }
