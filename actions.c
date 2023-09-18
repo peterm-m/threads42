@@ -30,14 +30,21 @@ void	ph_take_fork(t_philo *ph)
 	return ;
 }
 
+// ph_take_fork
+// ph_take_fork
+// ph_eat
 int	ph_eat(t_philo *ph)
 {
 	ph_print_action(ph->id, ph, LOG_EAT);
+	ph->n_eat -= 1;
+	if (ph->n_eat == 0)
+		return (END);
 	return (GOOD);
 }
 
 int	ph_sleep(t_philo *ph)
 {
+	
 	ph_print_action(ph->id, ph, LOG_SLEEP);
 	return (GOOD);
 }

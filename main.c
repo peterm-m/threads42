@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-static	t_input	*parser(int argc, const char **argv)
+static	t_input	*ph_parser(int argc, const char **argv)
 {
 	t_input	*i;
 
@@ -39,7 +39,7 @@ static	t_input	*parser(int argc, const char **argv)
 	return (i);
 }
 
-static void	clean(t_input *input)
+static void	ph_clean(t_input *input)
 {
 	free(input);
 	return ;
@@ -54,14 +54,14 @@ int	main(int argc, char const **argv)
 		err_exit(ERR_MSG_NARGS);
 		return (EXIT_FAILURE);
 	}
-	input = parser(argc, argv);
+	input = ph_parser(argc, argv);
 	if (input == NULL)
 		return (EXIT_FAILURE);
 	if (ph_philosophers(input) == EXIT_FAILURE)
 	{
-		clean(input);
+		ph_clean(input);
 		return (EXIT_FAILURE);
 	}
-	clean(input);
+	ph_clean(input);
 	return (EXIT_SUCCESS);
 }
