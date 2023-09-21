@@ -44,7 +44,6 @@ int	ph_eat(t_philo *ph)
 
 int	ph_sleep(t_philo *ph)
 {
-	
 	ph_print_action(ph->id, ph, LOG_SLEEP);
 	return (GOOD);
 }

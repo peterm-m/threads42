@@ -82,6 +82,8 @@ static t_info	*ph_philo_launcher(t_info *info)
 			return ((t_info *) NULL);
 		}
 	}
+	while (--i >= 0)
+		pthread_join(info->philo[i].thread, NULL);
 	return (info);
 }
 
@@ -96,7 +98,6 @@ int	ph_philosophers(t_input *input)
 	info = ph_philo_launcher(info);
 	if (info == NULL)
 		return (EXIT_FAILURE);
-	pthread_join(info->philo[info->n_ph -1].thread, NULL);
 	ph_clean(info);
 	return (EXIT_SUCCESS);
 }
