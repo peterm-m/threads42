@@ -16,16 +16,16 @@ static	t_input	*ph_parser(int argc, const char **argv)
 {
 	t_input	*i;
 
-	i = (t_input *) malloc(sizeof(i));
+	i = (t_input *) malloc(sizeof(t_input));
 	if (i == NULL)
 	{
 		err_exit(ERR_MSG_MALLOC);
 		return (i);
 	}	
-	i->n_ph = get_uint(argv[1]);
-	i->t_die = get_uint(argv[2]);
-	i->t_eat = get_uint(argv[3]);
-	i->t_sleep = get_uint(argv[4]);
+	i->n_ph = (int)get_uint(argv[1]);
+	i->t_die = (t_time)get_uint(argv[2]);
+	i->t_eat = (t_time)get_uint(argv[3]);
+	i->t_sleep = (t_time)get_uint(argv[4]);
 	i->n_eat = -1;
 	if (argc == 6)
 		i->n_eat = (int) get_uint(argv[5]);

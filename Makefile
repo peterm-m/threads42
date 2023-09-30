@@ -8,6 +8,8 @@ SRCS := \
 	utils.c\
 	philo.c\
 	life.c\
+	time.c\
+	logs.c\
 	actions.c\
 
 SRCS := $(SRCS:%=$(SRC_DIR)/%)
@@ -25,12 +27,12 @@ DIR_DUP = mkdir -p $(@D)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(OBJS) $(PTHREAD) -o $(NAME)
+	$(CC) $(OBJS) $(PTHREAD) $(CFLAG) -o $(NAME)
 	$(info CREATED $(NAME))
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(DIR_DUP)
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAG) -c -o $@ $<
 	$(info CREATED $@)
 
 clean:

@@ -43,22 +43,27 @@
 # define DIE  1
 # define END  2
 
-struct	s_philo;
+typedef long long int	t_time;
+
+struct					s_philo;
 
 typedef struct s_info
 {
-	unsigned int	n_ph;
-	unsigned int	t_die;
-	unsigned int	t_eat;
-	unsigned int	t_sleep;
+	int				philo_die;
+	int				philo_end;
+	int				n_ph;
+	t_time			t_die;
+	t_time			t_eat;
+	t_time			t_sleep;
 	struct s_philo	*philo;
 }	t_info;
 
 typedef struct s_philo
 {
-	int				id;
-	int				n_eat;
-	unsigned int	t_from_eat;
+	long long int	id;
+	long long int	n_eat;
+	t_time			t_life;
+	t_time			t_die;
 	pthread_t		thread;
 	pthread_mutex_t	fork;
 	t_info			*info;
@@ -66,16 +71,17 @@ typedef struct s_philo
 
 int				ph_philosophers(t_input *input);
 
-void			ph_print_action(int time, t_philo *ph, const char *log);
+void			ph_print_action(t_philo *ph, const char *log);
 
 void			*ph_life(void *a);
 
-void			ph_take_fork(t_philo *ph);
+int				ph_take_fork(t_philo *ph);
 int				ph_eat(t_philo *ph);
 int				ph_sleep(t_philo *ph);
 int				ph_think(t_philo *ph);
 
 void			err_exit(const char *format);
-unsigned int	get_uint(const char *str);
+long long int	get_uint(const char *str);
+int				ph_wait(t_time len_time, t_philo *ph);
 
 #endif

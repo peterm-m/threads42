@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-static int	ph_day(void *a)
+static int	ph_day(t_philo *a)
 {
 	t_philo		*philo;
 	int			out;
@@ -33,24 +33,22 @@ static int	ph_day(void *a)
 void	*ph_life(void *a)
 {
 	static pthread_mutex_t	creation = PTHREAD_MUTEX_INITIALIZER;
-	static int				philo_created = 0;
-	static int				philo_die = 0;
-	static int				philo_end = 0;
 	int						out;
+	t_philo					*ph;
 
-	pthread_mutex_lock(&creation);
-	philo_created += 1;
-	pthread_mutex_unlock(&creation);
-	while ((philo_die != 1) && (philo_end < philo_created))
+	ph = (t_philo *) a;
+	ph->t_life = (t_time) 0;
+	ph->t_die = ((t_philo *)a)->info->t_die;
+	while ((ph->info->philo_die != 1) && (ph->info->philo_end != ph->info->n_ph))
 	{
-		out = ph_day(a);
+		out = ph_day(ph);
 		if (out == DIE || out == END)
 		{
 			pthread_mutex_lock(&creation);
 			if (out == DIE)
-				philo_die = 1;
+				ph->info->philo_die = 1;
 			else
-				philo_end += 1;
+				ph->info->philo_end += 1;
 			pthread_mutex_unlock(&creation);
 		}
 	}

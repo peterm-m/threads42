@@ -12,12 +12,12 @@
 
 #include "philo.h"
 
-static long int	ft_atol(const char *str)
+static long long int	ft_atol(const char *str)
 {
-	unsigned long int	c;
-	int					sing;
+	unsigned long long int	c;
+	int						sing;
 
-	c = 0;
+	c = 0LL;
 	sing = 1;
 	while (*str == ' ' || (*str < 14 && *str > 8))
 		str++;
@@ -33,7 +33,7 @@ static long int	ft_atol(const char *str)
 	}
 	if (c > LONG_MAX && sing == 1)
 		return (-1);
-	if (c > (unsigned long int)(-LONG_MIN) && sing == -1)
+	if (c > (unsigned long long int)(-LLONG_MIN) && sing == -1)
 		return (0);
 	return (c * sing);
 }
@@ -52,7 +52,7 @@ static int	isnum(const char *str)
 		return (1);
 }
 
-unsigned int	get_uint(const char *str)
+long long int	get_uint(const char *str)
 {
 	long	res;
 

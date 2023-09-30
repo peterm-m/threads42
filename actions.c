@@ -12,44 +12,65 @@
 
 #include "philo.h"
 
-// critical section screen logs overlaps
-void	ph_print_action(int time, t_philo *ph, const char *log)
+int	ph_take_fork(t_philo *ph)
 {
-	static pthread_mutex_t	screen = PTHREAD_MUTEX_INITIALIZER;
-
-	pthread_mutex_lock(&screen);
-	printf("%d %d %s\n", time, ph->id, log);
-	pthread_mutex_unlock(&screen);
-	return ;
+	pthread_mutex_lock(&(ph->info->philo[ph->id -1].fork));
+	ph_print_action(ph, LOG_FORK);
+	pthread_mutex_lock(&(ph->info->philo[ph->id % ph->info->n_ph].fork));
+	ph_print_action(ph, LOG_FORK);
+	return (GOOD);
 }
 
-// critical section forks
-void	ph_take_fork(t_philo *ph)
+int	ph_drop_fork(t_philo *ph)
 {
-	ph_print_action(ph->id, ph, LOG_FORK);
-	return ;
+	pthread_mutex_unlock(&(ph->info->philo[ph->id -1].fork));
+	pthread_mutex_unlock(&(ph->info->philo[ph->id % ph->info->n_ph].fork));
+	return (GOOD);
 }
 
-// ph_take_fork
-// ph_take_fork
-// ph_eat
 int	ph_eat(t_philo *ph)
 {
-	ph_print_action(ph->id, ph, LOG_EAT);
+	int	out;
+
+	out = ph_take_fork(ph);
+	if (out == DIE)
+		return (DIE);
+	out = ph_wait(ph->info->t_eat, ph);
+	if (out == GOOD && ph->info->philo_die == 0)
+		ph_print_action(ph, LOG_EAT);
+	else if (out == DIE)
+	{
+		ph->info->philo_die = 1;	
+		ph_drop_fork(ph);
+		ph_print_action(ph, LOG_DIE);
+		return (out);
+	}
+	ph_drop_fork(ph);
 	ph->n_eat -= 1;
-	if (ph->n_eat == 0)
+	ph->t_die = ph->info->t_die;
+	if (ph->n_eat != 0)
+		return (out);
+	else
 		return (END);
-	return (GOOD);
 }
 
 int	ph_sleep(t_philo *ph)
 {
-	ph_print_action(ph->id, ph, LOG_SLEEP);
-	return (GOOD);
+	int	out;
+
+	out = ph_wait(ph->info->t_sleep, ph);
+	if (out == GOOD && ph->info->philo_die == 0)
+		ph_print_action(ph, LOG_SLEEP);
+	else
+	{
+		ph->info->philo_die = 1;
+		ph_print_action(ph, LOG_DIE);
+	}
+	return (out);
 }
 
 int	ph_think(t_philo *ph)
 {
-	ph_print_action(ph->id, ph, LOG_THINK);
+	ph_print_action(ph, LOG_THINK);
 	return (GOOD);
 }
